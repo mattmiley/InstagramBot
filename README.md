@@ -1,2 +1,2 @@
 # InstagramBot
-Instagram Bot for updating covid-19 stats
+Instagram Bot for updating covid-19 stats.
