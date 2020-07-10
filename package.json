@@ -13,9 +13,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "canvas": "^2.6.1",
     "dotenv": "^8.2.0",
     "instagram-private-api": "^1.41.0",
-    "node-fetch": "^2.6.0"
+    "node-fetch": "^2.6.0",
+    "node-html-to-image": "^3.0.0"
   }
 }

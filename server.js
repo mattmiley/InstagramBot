@@ -1,10 +1,11 @@
 const fss = require("fs");
 const fs = require("fs").promises;
-const { createCanvas, loadImage } = require("canvas");
 const dotenv = require("dotenv");
 const fetch = require("node-fetch");
 const Gram = require("instagram-private-api");
 const get = require("request-promise");
+const nodeHtmlToImage = require("node-html-to-image");
+
 dotenv.config();
 
 var util = require("util");
@@ -66,64 +67,65 @@ async function updatePost() {
   console.log(stats.deaths);
   console.log(stats.deaths_diff);
 
-  const width = 800;
-  const height = 800;
-
-  const canvas = createCanvas(width, height);
-  const context = canvas.getContext("2d");
-
-  // context.fillStyle = "#000";
-  // context.fillRect(0, 0, width, height);
-
-  const text = "Hello, World!";
-
-  context.textAlign = "center";
-  context.fillStyle = "#fff";
-  context.font = "bold 45pt Menlo";
-  context.fillText(stats.region.province + " Covid Stats", 400, 80);
-  context.font = "bold 30pt Menlo";
   var dates = stats.date.split("-");
   var date = dates[1] + "-" + dates[2] + "-" + dates[0];
-  context.fillText(date, 400, 160);
-  context.font = "bold 35pt Menlo";
 
-  context.fillText("Confirmed: " + numCommas(stats.confirmed), 400, 260);
-  context.fillText(
+  var html =
+    `<html>
+  <head>
+    <style>
+      body {
+        width: 800px;
+        height: 800px;
+      }
+    </style>
+  </head>
+  <body style="background: black;">
+  <h1 style="color: black; text-align: center; font-size:10px;">Hello world!</h4>
+  <h1 style="color: white; text-align: center; font-size:60px;">` +
+    stats.region.province +
+    ` Covid Stats</h4>
+    <h1 style="color: white; text-align: center; font-size:30px;">` +
+    date +
+    `</h1>
+    <h1 style="color: white; text-align: center; font-size:50px;">Confirmed: ` +
+    numCommas(stats.confirmed) +
+    `</h1>
+    <h1 style="color: white; text-align: center; font-size:50px;">` +
     "(+" +
-      numCommas(stats.confirmed_diff) +
-      ") (" +
-      ((stats.confirmed_diff / stats.confirmed) * 100).toFixed(2) +
-      "%)",
-    400,
-    310
-  );
-
-  context.fillText("Active: " + numCommas(stats.active), 400, 460);
-  context.fillText(
+    numCommas(stats.confirmed_diff) +
+    ") (" +
+    ((stats.confirmed_diff / stats.confirmed) * 100).toFixed(2) +
+    "%)" +
+    `</h1>
+    <h1 style="color: white; text-align: center; font-size:50px;">` +
+    "Active: " +
+    numCommas(stats.active) +
+    `</h1>
+    <h1 style="color: white; text-align: center; font-size:50px;">` +
     "(+" +
-      numCommas(stats.active_diff) +
-      ") (" +
-      ((stats.active_diff / stats.active) * 100).toFixed(2) +
-      "%)",
-    400,
-    510
-  );
-
-  context.fillText("Deaths: " + stats.deaths, 400, 660);
-  context.fillText(
+    numCommas(stats.active_diff) +
+    ") (" +
+    ((stats.active_diff / stats.active) * 100).toFixed(2) +
+    "%)" +
+    `</h1>
+    <h1 style="color: white; text-align: center; font-size:50px;">` +
+    "Deaths: " +
+    stats.deaths +
+    `</h1>
+    <h1 style="color: white; text-align: center; font-size:50px;">` +
     "(+" +
-      numCommas(stats.deaths_diff) +
-      ") (" +
-      ((stats.deaths_diff / stats.deaths) * 100).toFixed(2) +
-      "%)",
-    400,
-    710
-  );
+    numCommas(stats.deaths_diff) +
+    ") (" +
+    ((stats.deaths_diff / stats.deaths) * 100).toFixed(2) +
+    "%)" +
+    `</h1>
+  </body>
+</html>`;
 
-  await loadImage("./ohio.png").then(async (image) => {
-    context.drawImage(image, 20, 700, 80, 80);
-    const buffer = canvas.toBuffer("image/jpeg");
-    await fs.writeFile("./pic.jpg", buffer);
+  await nodeHtmlToImage({
+    output: "./pic.jpg",
+    html: html,
   });
 
   const ig = new Gram.IgApiClient();
@@ -154,6 +156,10 @@ async function updatePost() {
   });
 
   console.log(publishResult.status);
+  if (publishResult.status === "ok") {
+    lastPostedDate = todaysDateStamp;
+  }
 }
 
+//updatePost(); //dev
 setInterval(updatePost, 600000); //Runs this funtion every 10 minutes
