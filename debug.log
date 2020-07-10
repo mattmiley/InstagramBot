@@ -1,0 +1,108 @@
+Fri Jul 10 2020 13:50:25 GMT-0400 (Eastern Daylight Time) {
+  date: '2020-07-09',
+  confirmed: 61331,
+  deaths: 3006,
+  recovered: 0,
+  confirmed_diff: 1150,
+  deaths_diff: 15,
+  recovered_diff: 0,
+  last_update: '2020-07-10 04:34:24',
+  active: 58325,
+  active_diff: 1135,
+  fatality_rate: 0.049,
+  region: {
+    iso: 'USA',
+    name: 'US',
+    province: 'Ohio',
+    lat: '40.3888',
+    long: '-82.7649',
+    cities: [ [Object] ]
+  }
+}
+Fri Jul 10 2020 13:50:55 GMT-0400 (Eastern Daylight Time) {
+  date: '2020-07-09',
+  confirmed: 61331,
+  deaths: 3006,
+  recovered: 0,
+  confirmed_diff: 1150,
+  deaths_diff: 15,
+  recovered_diff: 0,
+  last_update: '2020-07-10 04:34:24',
+  active: 58325,
+  active_diff: 1135,
+  fatality_rate: 0.049,
+  region: {
+    iso: 'USA',
+    name: 'US',
+    province: 'Ohio',
+    lat: '40.3888',
+    long: '-82.7649',
+    cities: [ [Object] ]
+  }
+}
+Fri Jul 10 2020 13:51:17 GMT-0400 (Eastern Daylight Time) {
+  date: '2020-07-09',
+  confirmed: 61331,
+  deaths: 3006,
+  recovered: 0,
+  confirmed_diff: 1150,
+  deaths_diff: 15,
+  recovered_diff: 0,
+  last_update: '2020-07-10 04:34:24',
+  active: 58325,
+  active_diff: 1135,
+  fatality_rate: 0.049,
+  region: {
+    iso: 'USA',
+    name: 'US',
+    province: 'Ohio',
+    lat: '40.3888',
+    long: '-82.7649',
+    cities: [ [Object] ]
+  }
+}
+Fri Jul 10 2020 13:51:42 GMT-0400 (Eastern Daylight Time) {
+  date: '2020-07-09',
+  confirmed: 61331,
+  deaths: 3006,
+  recovered: 0,
+  confirmed_diff: 1150,
+  deaths_diff: 15,
+  recovered_diff: 0,
+  last_update: '2020-07-10 04:34:24',
+  active: 58325,
+  active_diff: 1135,
+  fatality_rate: 0.049,
+  region: {
+    iso: 'USA',
+    name: 'US',
+    province: 'Ohio',
+    lat: '40.3888',
+    long: '-82.7649',
+    cities: [ [Object] ]
+  }
+}
+Fri Jul 10 2020 13:52:19 GMT-0400 (Eastern Daylight Time) {
+  date: '2020-07-09',
+  confirmed: 61331,
+  deaths: 3006,
+  recovered: 0,
+  confirmed_diff: 1150,
+  deaths_diff: 15,
+  recovered_diff: 0,
+  last_update: '2020-07-10 04:34:24',
+  active: 58325,
+  active_diff: 1135,
+  fatality_rate: 0.049,
+  region: {
+    iso: 'USA',
+    name: 'US',
+    province: 'Ohio',
+    lat: '40.3888',
+    long: '-82.7649',
+    cities: [ [Object] ]
+  }
+}
+Fri Jul 10 2020 13:52:23 GMT-0400 (Eastern Daylight Time) Ohio
+Fri Jul 10 2020 13:52:27 GMT-0400 (Eastern Daylight Time) ok
+Fri Jul 10 2020 14:26:00 GMT-0400 (Eastern Daylight Time) no data yet

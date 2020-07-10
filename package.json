@@ -1,0 +1,21 @@
+{
+  "name": "instagrambot",
+  "version": "1.0.0",
+  "description": "Instagram Bot for updating covid-19 stats.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github-InstagramBot:mattmiley/InstagramBot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "canvas": "^2.6.1",
+    "dotenv": "^8.2.0",
+    "instagram-private-api": "^1.41.0",
+    "node-fetch": "^2.6.0"
+  }
+}
