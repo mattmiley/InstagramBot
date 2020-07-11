@@ -23,6 +23,7 @@ function numCommas(x) {
 
 function getDateStamp() {
   var today = new Date();
+  today.setDate(today.getDate() - 1)
   var month = today.getMonth() + 1;
   if (month < 10) {
     month = "0" + month;
