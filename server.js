@@ -54,7 +54,7 @@ async function updatePost() {
   let data = await response.json();
 
   if (data.data.length === 0) {
-    console.log("no data yet");
+    console.log("no data yet: " + todaysDateStamp);
     return;
   }
 
