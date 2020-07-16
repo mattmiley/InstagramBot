@@ -44,125 +44,135 @@ async function updatePost() {
       console.log("already posted");
       return;
     }
-    // await response of fetch call
-    let response = await fetch(
-      "https://covid-api.com/api/reports?date=" +
-        todaysDateStamp +
-        "&q=US%20Ohio&iso=USA&region_name=US&region_province=Ohio&city_name=Lake"
-    );
-    // only proceed once promise is resolved
-    let data = await response.json();
 
-    if (data.data.length === 0) {
-      console.log("no data yet: " + todaysDateStamp);
-      return;
-    }
+    var states = ["ohio", "florida", "california"];
+    var i;
+    for (i = 0; i < states.length; i++) {
+      // await response of fetch call
+      let response = await fetch(
+        "https://covid-api.com/api/reports?date=" +
+          todaysDateStamp +
+          "&q=US%20" +
+          states[i] +
+          "&iso=USA&region_name=US&region_province=" +
+          states[i]
+      );
+      // only proceed once promise is resolved
+      let data = await response.json();
 
-    var stats = data.data[0];
-    console.log(stats.region.province);
-    console.log(stats.date);
-    console.log(stats.confirmed);
-    console.log(stats.confirmed_diff);
-    console.log(stats.active);
-    console.log(stats.active_diff);
-    console.log(stats.deaths);
-    console.log(stats.deaths_diff);
+      if (data.data.length === 0) {
+        console.log("no data yet: " + todaysDateStamp);
+        return;
+      }
 
-    var dates = stats.date.split("-");
-    var date = dates[1] + "-" + dates[2] + "-" + dates[0];
+      var stats = data.data[0];
+      console.log(stats.region.province);
+      console.log(stats.date);
+      console.log(stats.confirmed);
+      console.log(stats.confirmed_diff);
+      console.log(stats.active);
+      console.log(stats.active_diff);
+      console.log(stats.deaths);
+      console.log(stats.deaths_diff);
 
-    const width = 800;
-    const height = 800;
+      var dates = stats.date.split("-");
+      var date = dates[1] + "-" + dates[2] + "-" + dates[0];
 
-    const canvas = createCanvas(width, height);
-    const context = canvas.getContext("2d");
+      const width = 800;
+      const height = 800;
 
-    // context.fillStyle = "#000";
-    // context.fillRect(0, 0, width, height);
+      const canvas = createCanvas(width, height);
+      const context = canvas.getContext("2d");
 
-    const text = "Hello, World!";
+      context.textAlign = "center";
+      context.fillStyle = "#fff";
+      context.font = "bold 45pt Menlo";
+      context.fillText(stats.region.province + " Covid Stats", 400, 80);
+      context.font = "bold 30pt Menlo";
+      context.fillText(date, 400, 160);
+      context.font = "bold 35pt Menlo";
 
-    context.textAlign = "center";
-    context.fillStyle = "#fff";
-    context.font = "bold 45pt Menlo";
-    context.fillText(stats.region.province + " Covid Stats", 400, 80);
-    context.font = "bold 30pt Menlo";
-    context.fillText(date, 400, 160);
-    context.font = "bold 35pt Menlo";
+      context.fillText("Confirmed: " + numCommas(stats.confirmed), 400, 260);
+      context.fillText(
+        "(+" +
+          numCommas(stats.confirmed_diff) +
+          ") (" +
+          ((stats.confirmed_diff / stats.confirmed) * 100).toFixed(2) +
+          "%)",
+        400,
+        310
+      );
 
-    context.fillText("Confirmed: " + numCommas(stats.confirmed), 400, 260);
-    context.fillText(
-      "(+" +
-        numCommas(stats.confirmed_diff) +
-        ") (" +
-        ((stats.confirmed_diff / stats.confirmed) * 100).toFixed(2) +
-        "%)",
-      400,
-      310
-    );
+      context.fillText("Active: " + numCommas(stats.active), 400, 460);
+      context.fillText(
+        "(+" +
+          numCommas(stats.active_diff) +
+          ") (" +
+          ((stats.active_diff / stats.active) * 100).toFixed(2) +
+          "%)",
+        400,
+        510
+      );
 
-    context.fillText("Active: " + numCommas(stats.active), 400, 460);
-    context.fillText(
-      "(+" +
-        numCommas(stats.active_diff) +
-        ") (" +
-        ((stats.active_diff / stats.active) * 100).toFixed(2) +
-        "%)",
-      400,
-      510
-    );
+      context.fillText("Deaths: " + stats.deaths, 400, 660);
+      context.fillText(
+        "(+" +
+          numCommas(stats.deaths_diff) +
+          ") (" +
+          ((stats.deaths_diff / stats.deaths) * 100).toFixed(2) +
+          "%)",
+        400,
+        710
+      );
 
-    context.fillText("Deaths: " + stats.deaths, 400, 660);
-    context.fillText(
-      "(+" +
-        numCommas(stats.deaths_diff) +
-        ") (" +
-        ((stats.deaths_diff / stats.deaths) * 100).toFixed(2) +
-        "%)",
-      400,
-      710
-    );
+      await loadImage("./artwork/" + states[i] + ".png").then(async (image) => {
+        context.drawImage(image, 20, 700, 80, 80);
+        const buffer = canvas.toBuffer("image/jpeg");
+        await fs.writeFile("./" + states[i] + ".jpg", buffer);
+      });
 
-    await loadImage("./artwork/ohio.png").then(async (image) => {
-      context.drawImage(image, 20, 700, 80, 80);
-      const buffer = canvas.toBuffer("image/jpeg");
-      await fs.writeFile("./pic.jpg", buffer);
-    });
+      const ig = new Gram.IgApiClient();
 
-    const ig = new Gram.IgApiClient();
+      // basic login-procedure
+      var ig_user_name = states[i] + "_covid_stats";
+      ig.state.generateDevice(ig_user_name);
+      // ig.state.proxyUrl = process.env.IG_PROXY;
+      await ig.account.login(ig_user_name, process.env.IG_PASSWORD);
 
-    // basic login-procedure
-    ig.state.generateDevice(process.env.IG_USERNAME);
-    // ig.state.proxyUrl = process.env.IG_PROXY;
-    await ig.account.login(process.env.IG_USERNAME, process.env.IG_PASSWORD);
+      const path = "./" + states[i] + ".jpg";
 
-    const path = "./pic.jpg";
-    const { latitude, longitude, searchQuery } = {
-      latitude: 40.865487,
-      longitude: -82.69551,
-      searchQuery: "ohio",
-    };
+      const { latitude, longitude, searchQuery } = {
+        latitude: 0.0,
+        longitude: 0.0,
+        searchQuery: states[i],
+      };
 
-    const locations = await ig.search.location(
-      latitude,
-      longitude,
-      searchQuery
-    );
+      const locations = await ig.search.location(
+        latitude,
+        longitude,
+        searchQuery
+      );
 
-    const mediaLocation = locations[0];
-    console.log(mediaLocation.name);
+      const mediaLocation = locations[0];
+      console.log(mediaLocation.name);
 
-    var buf = await fs.readFile(path);
+      var buf = await fs.readFile(path);
 
-    const publishResult = await ig.publish.photo({
-      file: buf,
-      caption: "#OhioCovid-19 Stats for " + date,
-      location: mediaLocation,
-    });
+      const publishResult = await ig.publish.photo({
+        file: buf,
+        caption:
+          "#" +
+          states[i].charAt(0).toUpperCase() +
+          states[i].slice(1) +
+          "Covid-19 Stats for " +
+          date,
+        location: mediaLocation,
+      });
 
-    console.log(publishResult.status);
-    if (publishResult.status === "ok") {
-      lastPostedDate = todaysDateStamp;
+      console.log(publishResult.status);
+      if (publishResult.status === "ok") {
+        lastPostedDate = todaysDateStamp;
+      }
     }
   } catch (err) {
     console.log(err.message);
