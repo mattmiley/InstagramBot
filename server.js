@@ -164,7 +164,7 @@ async function updatePost() {
           "#" +
           states[i].charAt(0).toUpperCase() +
           states[i].slice(1) +
-          "Covid-19 Stats for " +
+          "Covid19 #covid19 #covid_19 #covid Stats for " +
           date,
         location: mediaLocation,
       });
